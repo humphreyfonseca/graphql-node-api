@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as graphqlHTTP from 'express-graphql';
 
+import db from './models';
 import schema from './graphql/schema';
 import { graphql } from 'graphql';
 
@@ -19,11 +20,21 @@ class App{
             })
         });*/
 
-        this.express.use('/graphql', graphqlHTTP({
-            schema: schema,
-            //graphiql: process.env.NODE_ENV === 'development'
-            graphiql: true
-        }));
+        this.express.use('/graphql', 
+            
+            (req, res, next) => {
+                req['context'] = {};
+                req['context'].db = db;
+                next();
+            },
+
+            graphqlHTTP((req) => ({
+                schema: schema,
+                //graphiql: process.env.NODE_ENV === 'development'
+                graphiql: true,
+                context: req['context']
+            }))
+        );
 
     }
 }
