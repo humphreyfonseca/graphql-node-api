@@ -14,8 +14,7 @@ const postTypes = `
     input PostInput{
         title: String!
         content: String!
-        photo: String!
-        author: Int!
+        photo: String!        
     }
 `;
 

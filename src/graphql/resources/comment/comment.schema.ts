@@ -12,9 +12,7 @@ const commentTypes = `
 
     input CommentInput{
         comment: String!
-        post: Int!
-        user: Int!
-        
+        post: Int!       
     }
 `;
 
