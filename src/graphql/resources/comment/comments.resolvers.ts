@@ -1,3 +1,4 @@
+import { ResolverContext } from './../../../interfaces/ResolverContextInterface';
 import { throwError } from './../../../util/utils';
 import { AuthUser } from './../../../interfaces/AuthUserInterface';
 import { authResovers } from './../../../composable/auth.resolver';
@@ -7,32 +8,34 @@ import { GraphQLResolveInfo } from 'graphql';
 import { Transaction } from 'sequelize';
 import { handleError } from '../../../util/utils';
 import { compose } from '../../../composable/composable.resolver';
+import { DataLoaders } from '../../../interfaces/DataLoadersInterface';
 
 export const commentResolvers = {
 
     Comment: {
 
-        user: (comment, {postId, first= 10, offset=0}, {db}: {db: DbConnection}, info: GraphQLResolveInfo) => {
-            return db.User
-                .findById(comment.get('user'))
-                .catch(handleError);
+        user: (comment, {postId, first= 10, offset=0}, {db, dataloaders: {userLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return userLoader
+                .load({key: comment.get('user'), info})
+                .catch(handleError);   
         },
-        post: (comment, {postId, first= 10, offset=0}, {db}: {db: DbConnection}, info: GraphQLResolveInfo) => {
-            return db.Post
-                .findById(comment.get('post'))
+        post: (comment, {postId, first= 10, offset=0}, {db, dataloaders: {postLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return postLoader
+                .load({ key: comment.get('post'), info})
                 .catch(handleError);
         }
     },
 
     Query:{
 
-        commentsByPost: (parent, {postId, first= 10, offset=0}, {db}: {db: DbConnection}, info: GraphQLResolveInfo) => {
+        commentsByPost: (parent, {postId, first= 10, offset=0}, context: ResolverContext, info: GraphQLResolveInfo) => {
             postId = parseInt(postId);
-            return db.Comment
+            return context.db.Comment
                 .findAll({
                     where: {post: postId},
                     limit: first,
-                    offset: offset
+                    offset: offset,
+                    attributes: context.requestedFields.getFields(info)
                 })
                 .catch(handleError);
         }
