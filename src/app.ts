@@ -37,8 +37,8 @@ class App{
             extractJwtMiddleware(),
             
             (req, res, next) => {                
-                req['context'].['db'] = db;
-                req['context'].['dataloaders'] = this.dataLoaderFactory.getLoaders();
+                req['context']['db'] = db;
+                req['context']['dataloaders'] = this.dataLoaderFactory.getLoaders();
                 req['context']['requestedFields'] = this.requestedFields;
                 next();
             },
