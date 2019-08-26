@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "nodemon --delay 5 dist/index set NODE_ENV=development set JWT_SECRET=iron_man",
     "gulp": "gulp",
-    "test": "set NODE_ENV=test&&set JWT_SECRET=jwt_test&&mocha "
-  },
+    "test": "set NODE_ENV=test&&set JWT_SECRET=jwt_test&&mocha ",
+    "coverage": "nyc --extension=.ts   --reporter=text --reporter=html npm test"
+  },  
   "keywords": [],
   "author": "",
   "license": "ISC",

@@ -9,7 +9,7 @@ export interface CommentAttributes {
     comment?: string;
     post?: number;
     user?: number;
-    createdAt: string;
+    createdAt?: string;
     updatedAt?: string;
 }
 
