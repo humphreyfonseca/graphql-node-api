@@ -4,11 +4,10 @@
             "esnext"
         ],
         "target": "es6",
-        "module": "commonjs",
-        "outDir": "dist"
+        "module": "commonjs"
     },
     "compileOnSave" : false,
-    "inclide":[
+    "include":[
         "src/**/*.ts"
     ],
     "exclude":[
